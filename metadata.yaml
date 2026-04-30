@@ -1,7 +1,0 @@
-homepage: "https://developers.facebook.com/docs/marketing-api/conversions-api/parameter-builder-feature-library"
-documentation: "https://developers.facebook.com/docs/marketing-api/conversions-api/parameter-builder-feature-library/client-side-onboarding"
-versions:
-  # Latest version
-  - sha: 7ebbbcf03c295637ad62636c7bdea4ad4b98d64f
-    changeNotes: Add parambuilder template
-  # Older versions
