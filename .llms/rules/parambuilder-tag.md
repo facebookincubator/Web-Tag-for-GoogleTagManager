@@ -28,7 +28,7 @@ if (typeof clientParamBuilder.processAndCollectAllParams === 'function') {
 
 ## NEVER change the injected script URL without updating `___WEB_PERMISSIONS___`
 
-The sandboxed JS injects from `https://capi-automation.s3.us-east-2.amazonaws.com/public/client_js/capiParamBuilder/clientParamBuilder.bundle.js`. The `inject_script` permission entry in `___WEB_PERMISSIONS___` lists URLs as **literal strings** — GTM rejects `injectScript()` calls to a URL not in the allowlist with **no console error** at runtime in production. ALWAYS update both the URL constant and the permission entry in the same diff.
+The sandboxed JS injects from `https://cdn.jsdelivr.net/npm/meta-capi-param-builder-clientjs/dist/clientParamBuilder.bundle.js` with `https://unpkg.com/meta-capi-param-builder-clientjs/dist/clientParamBuilder.bundle.js` as a fallback. These unversioned URLs intentionally follow the latest npm release. The `inject_script` permission entry in `___WEB_PERMISSIONS___` lists URLs as **literal strings** — GTM rejects `injectScript()` calls to a URL not in the allowlist with **no console error** at runtime in production. ALWAYS update both URL constants and both permission entries in the same diff.
 
 ## DO NOT add entries to `___TEMPLATE_PARAMETERS___`
 

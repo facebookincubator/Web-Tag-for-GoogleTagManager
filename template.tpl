@@ -66,9 +66,14 @@ function processAndCollectAllParams() {
   }
 }
 
-const url = 'https://capi-automation.s3.us-east-2.amazonaws.com/public/client_js/capiParamBuilder/clientParamBuilder.bundle.js';
+const primaryScriptUrl = 'https://cdn.jsdelivr.net/npm/meta-capi-param-builder-clientjs/dist/clientParamBuilder.bundle.js';
+const fallbackScriptUrl = 'https://unpkg.com/meta-capi-param-builder-clientjs/dist/clientParamBuilder.bundle.js';
 
-injectScript(url, processAndCollectAllParams, data.gtmOnFailure, url);
+const loadFallbackScript = () => {
+  injectScript(fallbackScriptUrl, processAndCollectAllParams, data.gtmOnFailure, fallbackScriptUrl);
+};
+
+injectScript(primaryScriptUrl, processAndCollectAllParams, loadFallbackScript, primaryScriptUrl);
 
 
 ___WEB_PERMISSIONS___
@@ -109,7 +114,11 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://capi-automation.s3.us-east-2.amazonaws.com/public/client_js/capiParamBuilder/clientParamBuilder.bundle.js"
+                "string": "https://cdn.jsdelivr.net/npm/meta-capi-param-builder-clientjs/dist/clientParamBuilder.bundle.js"
+              },
+              {
+                "type": 1,
+                "string": "https://unpkg.com/meta-capi-param-builder-clientjs/dist/clientParamBuilder.bundle.js"
               }
             ]
           }
@@ -379,9 +388,11 @@ scenarios:
     const log = require('logToConsole');
     const injectScript = require('injectScript');
     const copyFromWindow = require('copyFromWindow');
+    const capturedUrls = [];
 
     // Mock failed script injection
     mock('injectScript', function(url, onSuccess, onFailure) {
+      capturedUrls.push(url);
       onFailure();
     });
 
@@ -393,6 +404,8 @@ scenarios:
     // Assert
     assertApi('gtmOnSuccess').wasNotCalled();
     assertApi('gtmOnFailure').wasCalled();
+    assertThat(capturedUrls).contains('https://cdn.jsdelivr.net/npm/meta-capi-param-builder-clientjs/dist/clientParamBuilder.bundle.js');
+    assertThat(capturedUrls).contains('https://unpkg.com/meta-capi-param-builder-clientjs/dist/clientParamBuilder.bundle.js');
 - name: Verify correct script URL is used
   code: |-
     // Arrange
@@ -426,7 +439,7 @@ scenarios:
     runCode(mockData);
 
     // Assert
-    const expectedUrl = 'https://capi-automation.s3.us-east-2.amazonaws.com/public/client_js/capiParamBuilder/clientParamBuilder.bundle.js';
+    const expectedUrl = 'https://cdn.jsdelivr.net/npm/meta-capi-param-builder-clientjs/dist/clientParamBuilder.bundle.js';
     assertThat(capturedUrl).isEqualTo(expectedUrl);
 
 
